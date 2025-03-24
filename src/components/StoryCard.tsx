@@ -1,28 +1,26 @@
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
 import { Story } from "../types/story"
 import { useNavigate } from "react-router-dom"
+import { StoryActions } from "./StoryActions"
 
 interface StoryCardProps {
-  story: Story;
+  story: Story
 }
 
 export function StoryCard({ story }: StoryCardProps) {
   const navigate = useNavigate()
+  // Removed handleCardClick function since we'll use the onClick directly in the Card
 
   return (
     <Card 
-      className="overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
+      className="cursor-pointer hover:shadow-lg transition-shadow"
       onClick={() => navigate(`/story/${story.id}`)}
     >
-      <div className="relative h-48">
-        <img
-          src={story.image}
-          alt={story.title}
-          className="w-full h-full object-cover"
-        />
-      </div>
       <CardHeader>
-        <CardTitle>{story.title}</CardTitle>
+        <div className="flex justify-between items-start">
+          <CardTitle>{story.title}</CardTitle>
+          <StoryActions storyId={story.id} />
+        </div>
       </CardHeader>
       <CardContent>
         <p className="line-clamp-3">{story.content}</p>

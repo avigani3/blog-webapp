@@ -11,7 +11,11 @@ import {
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 
-export function AuthButtons() {
+interface AuthButtonsProps {
+  onClose?: () => void
+}
+
+export function AuthButtons({ onClose }: AuthButtonsProps) {
   const { user, signIn, signUp, signOut } = useAuth()
   const [isSignUp, setIsSignUp] = useState(false) // stato che indica se si è in fase di registrazione o di login
   const [email, setEmail] = useState('')
@@ -30,6 +34,7 @@ export function AuthButtons() {
         await signIn(email, password)
       }
       setOpen(false)
+      onClose?.()
     } catch (error) {
       setError(error instanceof Error ? error.message : 'An error occurred')
     }

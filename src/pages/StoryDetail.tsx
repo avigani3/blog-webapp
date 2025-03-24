@@ -1,37 +1,41 @@
 import { useParams, Link } from "react-router-dom"
-import { StoriesData } from "../types/story"
-import storiesData from "../assets/stories.json"
-import { ArrowLeft } from "lucide-react"
+import { Story } from "../types/story"
+import stories from "../assets/stories.json"
 import { Button } from "../components/ui/button"
+import { StoryActions } from "../components/StoryActions"
+import { ArrowLeft } from "lucide-react"
 
 export function StoryDetail() {
   const { id } = useParams()
-  const story = (storiesData as StoriesData).stories.find(
-    (s) => s.id === Number(id)
-  )
+  const story = (stories as { stories: Story[] }).stories.find((s: Story) => s.id === id)
 
+  if (!story) {
     return (
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-8">
-          <Link to="/">
-            <Button variant="ghost" className="mb-4">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Torna alle storie
-            </Button>
-          </Link>
-          {story ? (
-            <article className="prose prose-lg dark:prose-invert mx-auto">
-              <h1 className="text-4xl font-bold mb-6 text-foreground">{story.title}</h1>
-              <div className="bg-card text-card-foreground rounded-lg p-6 shadow-lg">
-                <p className="whitespace-pre-line">{story.content}</p>
-              </div>
-            </article>
-          ) : (
-            <article className="prose prose-lg dark:prose-invert mx-auto">
-              <h1 className="text-4xl font-bold mb-6 text-foreground">Storia non trovata</h1>
-            </article>
-          )}
-        </div>
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-2xl font-bold mb-4">Storia non trovata</h1>
+        <Link to="/">
+          <Button>Torna alla lista</Button>
+        </Link>
       </div>
     )
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex justify-between items-start mb-8">
+        <h1 className="text-3xl font-bold">{story.title}</h1>
+        <StoryActions storyId={story.id} />
+      </div>
+      <div className="prose dark:prose-invert max-w-none">
+        {story.content.split('\n').map((paragraph: string, index: number) => (
+          <p key={index}>{paragraph}</p>
+        ))}
+      </div>
+      <div className="mt-8">
+        <Link to="/">
+          <Button><ArrowLeft className="mr-2 h-4 w-4" />Torna alla lista</Button>
+        </Link>
+      </div>
+    </div>
+  )
 } 

@@ -1,5 +1,5 @@
 export interface Story {
-  id: number;
+  id: string;
   title: string;
   content: string;
   image: string;
