@@ -17,8 +17,8 @@ export function StoryCard({ story }: StoryCardProps) {
       onClick={() => navigate(`/story/${story.id}`)}
     >
       <CardHeader>
-        <div className="flex justify-between items-start">
-          <CardTitle>{story.title}</CardTitle>
+        <div className="flex justify-between items-center">
+          <CardTitle className="font-fredoka text-lg">{story.title}</CardTitle>
           <StoryActions storyId={story.id} />
         </div>
       </CardHeader>

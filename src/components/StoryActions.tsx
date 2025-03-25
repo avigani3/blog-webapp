@@ -1,7 +1,6 @@
 import { Button } from "./ui/button"
 import { Bookmark, CheckCircle2 } from "lucide-react"
-import { useState, useEffect } from "react"
-import { supabase } from "../lib/supabase"
+import { useState } from "react"
 import { toast } from "sonner"
 import { AuthButtons } from "./AuthButtons"
 import { useAuth } from "../lib/auth-context"
@@ -11,42 +10,8 @@ interface StoryActionsProps {
 }
 
 export function StoryActions({ storyId }: StoryActionsProps) {
-  const { user } = useAuth()
-  const [isFavorite, setIsFavorite] = useState(false)
-  const [isRead, setIsRead] = useState(false)
+  const { user, isFavorite, toggleFavorite, isRead, toggleRead } = useAuth()
   const [showLogin, setShowLogin] = useState(false)
-
-  useEffect(() => {
-    if (user) {
-      checkFavoriteStatus()
-      checkReadStatus()
-    } else {
-      setIsFavorite(false)
-      setIsRead(false)
-    }
-  }, [user, storyId])
-
-  const checkFavoriteStatus = async () => {
-    if (!user) return
-    const { data } = await supabase
-      .from('favorites')
-      .select()
-      .eq('user_id', user.id)
-      .eq('story_id', storyId)
-      .single()
-    setIsFavorite(!!data)
-  }
-
-  const checkReadStatus = async () => {
-    if (!user) return
-    const { data } = await supabase
-      .from('read_stories')
-      .select()
-      .eq('user_id', user.id)
-      .eq('story_id', storyId)
-      .single()
-    setIsRead(!!data)
-  }
 
   const handleIconClick = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -56,53 +21,29 @@ export function StoryActions({ storyId }: StoryActionsProps) {
     }
   }
 
-  const toggleFavorite = async () => {
+  const handleFavoriteClick = async () => {
     if (!user) {
       setShowLogin(true)
       return
     }
 
     try {
-      if (isFavorite) {
-        await supabase
-          .from('favorites')
-          .delete()
-          .eq('user_id', user.id)
-          .eq('story_id', storyId)
-        toast.success("Rimosso dai preferiti")
-      } else {
-        await supabase
-          .from('favorites')
-          .insert({ user_id: user.id, story_id: storyId })
-        toast.success("Aggiunto ai preferiti")
-      }
-      setIsFavorite(!isFavorite)
+      await toggleFavorite(storyId)
+      toast.success(isFavorite(storyId) ? "Rimosso dai preferiti" : "Aggiunto ai preferiti")
     } catch (error) {
       toast.error("Si è verificato un errore durante l'operazione")
     }
   }
 
-  const toggleRead = async () => {
+  const handleReadClick = async () => {
     if (!user) {
       setShowLogin(true)
       return
     }
 
     try {
-      if (isRead) {
-        await supabase
-          .from('read_stories')
-          .delete()
-          .eq('user_id', user.id)
-          .eq('story_id', storyId)
-        toast.success("Rimosso dalle storie lette")
-      } else {
-        await supabase
-          .from('read_stories')
-          .insert({ user_id: user.id, story_id: storyId })
-        toast.success("Segnato come letto")
-      }
-      setIsRead(!isRead)
+      await toggleRead(storyId)
+      toast.success(isRead(storyId) ? "Segnato come letto" : "Rimosso dalle storie lette")
     } catch (error) {
       toast.error("Si è verificato un errore durante l'operazione")
     }
@@ -114,16 +55,16 @@ export function StoryActions({ storyId }: StoryActionsProps) {
         <Button
           variant="ghost"
           size="icon"
-          className={isFavorite ? "text-yellow-500" : "text-muted-foreground hover:text-yellow-500"}
-          onClick={toggleFavorite}
+          className={isFavorite(storyId) ? "text-yellow-500" : "text-muted-foreground"}
+          onClick={handleFavoriteClick}
         >
           <Bookmark className="h-4 w-4" />
         </Button>
         <Button
           variant="ghost"
           size="icon"
-          className={isRead ? "text-green-500" : "text-muted-foreground hover:text-green-500"}
-          onClick={toggleRead}
+          className={isRead(storyId) ? "text-green-500" : "text-muted-foreground"}
+          onClick={handleReadClick}
         >
           <CheckCircle2 className="h-4 w-4" />
         </Button>
@@ -137,11 +78,13 @@ export function StoryActions({ storyId }: StoryActionsProps) {
           }}
         >
           <div 
-            className="bg-background p-6 rounded-lg shadow-lg max-w-md w-full"
+            className="bg-background p-6 rounded-lg shadow-lg max-w-md w-full mx-4"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2 className="text-lg font-semibold mb-4">Accedi per continuare</h2>
-            <AuthButtons onClose={() => setShowLogin(false)} />
+            <div className="max-w-sm mx-auto flex flex-col items-center">
+              <h2 className="text-lg font-semibold mb-4 text-center">Accedi per continuare</h2>
+              <AuthButtons onClose={() => setShowLogin(false)} />
+            </div>
           </div>
         </div>
       )}
