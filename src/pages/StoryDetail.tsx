@@ -21,7 +21,7 @@ export function StoryDetail() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-4">
       <div className="flex justify-between items-start mb-8">
         <h1 className="text-3xl font-bold">{story.title}</h1>
         <StoryActions storyId={story.id} />
@@ -32,7 +32,7 @@ export function StoryDetail() {
         ))}
       </div>
       <div className="mt-8">
-        <Link to="/">
+        <Link to="/blog-webapp">
           <Button><ArrowLeft className="mr-2 h-4 w-4" />Torna alla lista</Button>
         </Link>
       </div>

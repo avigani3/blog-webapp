@@ -4,6 +4,12 @@ import { useState } from "react"
 import { toast } from "sonner"
 import { AuthButtons } from "./AuthButtons"
 import { useAuth } from "../lib/auth-context"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip"
 
 interface StoryActionsProps {
   storyId: string
@@ -51,24 +57,40 @@ export function StoryActions({ storyId }: StoryActionsProps) {
 
   return (
     <>
-      <div className="flex gap-2" onClick={handleIconClick}>
-        <Button
-          variant="ghost"
-          size="icon"
-          className={isFavorite(storyId) ? "text-yellow-500" : "text-muted-foreground"}
-          onClick={handleFavoriteClick}
-        >
-          <Bookmark className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="ghost"
-          size="icon"
-          className={isRead(storyId) ? "text-green-500" : "text-muted-foreground"}
-          onClick={handleReadClick}
-        >
-          <CheckCircle2 className="h-4 w-4" />
-        </Button>
-      </div>
+      <TooltipProvider>
+        <div className="flex gap-2" onClick={handleIconClick}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className={`hover:text-yellow-500 ${isFavorite(storyId) ? "text-yellow-500" : "text-muted-foreground"}`}
+                onClick={handleFavoriteClick}
+              >
+                <Bookmark className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{isFavorite(storyId) ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti"}</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className={`hover:text-green-500 ${isRead(storyId) ? "text-green-500" : "text-muted-foreground"}`}
+                onClick={handleReadClick}
+              >
+                <CheckCircle2 className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{isRead(storyId) ? "Segna come non letto" : "Segna come letto"}</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+      </TooltipProvider>
       {showLogin && (
         <div 
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"

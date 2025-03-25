@@ -3,49 +3,34 @@ import { Search } from "lucide-react"
 import { Checkbox } from "./ui/checkbox"
 import { Label } from "./ui/label"
 import { useAuth } from "../lib/auth-context"
-import { useState } from "react"
 
 interface SearchBarProps {
-  onSearch: (query: string, favoritesOnly: boolean) => void
+  onSearch: (query: string) => void
+  favoritesOnly: boolean
+  onFavoritesChange: (value: boolean) => void
 }
 
-export function SearchBar({ onSearch }: SearchBarProps) {
+export function SearchBar({ onSearch, favoritesOnly, onFavoritesChange }: SearchBarProps) {
   const { user } = useAuth()
-  const [favoritesOnly, setFavoritesOnly] = useState(false)
-  const [searchQuery, setSearchQuery] = useState("")
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value)
-    onSearch(e.target.value, favoritesOnly)
-  }
-
-  const handleCheckboxChange = (checked: boolean) => {
-    setFavoritesOnly(checked)
-    onSearch(searchQuery, checked)
-  }
 
   return (
-    <div className="w-full max-w-2xl mx-auto mb-8">
+    <div className="flex flex-col gap-4">
       <div className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          type="text"
           placeholder="Cerca una storia..."
           className="pl-10"
-          value={searchQuery}
-          onChange={handleSearch}
+          onChange={(e) => onSearch(e.target.value)}
         />
       </div>
       {user && (
-        <div className="flex items-center space-x-2 mt-2">
+        <div className="flex items-center space-x-2 justify-end">
           <Checkbox 
             id="favorites" 
             checked={favoritesOnly}
-            onCheckedChange={handleCheckboxChange}
+            onCheckedChange={(checked) => onFavoritesChange(checked as boolean)}
           />
-          <Label htmlFor="favorites" className="text-sm text-muted-foreground">
-            Mostra solo i preferiti
-          </Label>
+          <Label htmlFor="favorites">Mostra solo i preferiti</Label>
         </div>
       )}
     </div>
