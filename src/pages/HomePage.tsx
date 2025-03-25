@@ -7,7 +7,6 @@ import { useAuth } from "../lib/auth-context"
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
