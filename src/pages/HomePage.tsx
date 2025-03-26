@@ -24,7 +24,9 @@ export function HomePage() {
   const { user, favoriteStoryIds } = useAuth()
 
   useEffect(() => {
-    setStoriesList((stories as { stories: Story[] }).stories)
+    // Ordina le storie in ordine inverso
+    const sortedStories = [...(stories as { stories: Story[] }).stories].reverse()
+    setStoriesList(sortedStories)
   }, [])
 
   useEffect(() => {
@@ -63,7 +65,7 @@ export function HomePage() {
   return (
     <main className="container mx-auto px-4">
       <div className="p-6 bg-linear-65 from-yellow-500 to-green-500 rounded-lg mb-8">
-      <h1 className="text-4xl font-fredoka font-bold text-center">Fiabe per Bambini</h1>
+        <h1 className="text-4xl font-fredoka font-bold text-center">Fiabe per Bambini</h1>
       </div>
       <SearchBar 
         onSearch={setSearchQuery} 

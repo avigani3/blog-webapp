@@ -10,7 +10,7 @@ function App() {
       <Navbar />
       <main className="container mx-auto px-4 py-8">
         <Routes>
-          <Route path="/blog-webapp" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/story/:id" element={<StoryDetail />} />
         </Routes>
       </main>
