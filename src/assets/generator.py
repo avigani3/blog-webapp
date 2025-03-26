@@ -22,7 +22,7 @@ client = OpenAI()
 query = """
 Devi generare favole rilassanti per bambini.
 La storia dovrebbe avere un tono dolce e calmante, con un tema positivo e rassicurante. 
-Usa personaggi amichevoli, come animali o creature fantastiche, e ambientazioni naturali come boschi, spiagge o giardini. 
+Usa personaggi amichevoli, come animali o creature fantastiche, e ambientazioni naturali o fiabesche. 
 La trama dovrebbe essere semplice, senza conflitti stressanti, e terminare con un messaggio di serenità e calma. 
 Usa descrizioni dettagliate e incoraggia l'immaginazione dei bambini. Mantieni il linguaggio semplice e adatto all'età.
 nei tag puoi mettere i personaggi e i valori della storia.
@@ -46,7 +46,7 @@ response = client.chat.completions.create(
       "content": [
         {
           "type": "text",
-          "text": "genera 4 storie, l'attributo di nome id parte da 13, l'attributo di nome premium ha sempre valore false"
+          "text": "genera 3 storie, l'attributo di nome id parte da 16, l'attributo di nome date deve essere 2025-03-26, l'attributo di nome premium ha sempre valore false"
         }
       ]
     },
@@ -66,10 +66,11 @@ response = client.chat.completions.create(
                               "id": {"type": "string"},
                               "title": {"type": "string"},
                               "content": {"type": "string"},
+                              "date": {"type": "string"},
                               "premium": {"type": "boolean"},
                               "tags": {"type": "array", "items": {"type": "string"}}
                           },
-                          "required": ["id", "title", "content", "premium", "tags"]
+                          "required": ["id", "title", "content", "date", "premium", "tags"]
                       }
                   }
               },

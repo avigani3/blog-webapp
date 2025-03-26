@@ -9,7 +9,6 @@ interface StoryCardProps {
 
 export function StoryCard({ story }: StoryCardProps) {
   const navigate = useNavigate()
-  // Removed handleCardClick function since we'll use the onClick directly in the Card
 
   return (
     <Card 
@@ -18,7 +17,7 @@ export function StoryCard({ story }: StoryCardProps) {
     >
       <CardHeader>
         <div className="flex justify-between items-center">
-          <CardTitle className="font-fredoka text-lg">{story.title}</CardTitle>
+          <CardTitle className="font-fredoka text-lg text-transparent bg-clip-text bg-linear-65 from-yellow-300 to-green-300">{story.title}</CardTitle>
           <StoryActions storyId={story.id} />
         </div>
       </CardHeader>
