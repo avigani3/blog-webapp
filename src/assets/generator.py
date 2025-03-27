@@ -46,7 +46,7 @@ response = client.chat.completions.create(
       "content": [
         {
           "type": "text",
-          "text": "genera 3 storie, l'attributo di nome id parte da 16, l'attributo di nome date deve essere 2025-03-26, l'attributo di nome premium ha sempre valore false"
+          "text": "genera 3 storie, l'attributo di nome id parte da 19, l'attributo di nome date deve essere 2025-03-27, l'attributo di nome premium ha sempre valore false"
         }
       ]
     },
